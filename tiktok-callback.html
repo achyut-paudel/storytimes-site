@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Storytimes: TikTok connected</title><link rel="stylesheet" href="style.css">
+<main>
+<h1 id="h">Connecting TikTok</h1>
+<p id="msg">Reading the answer from TikTok...</p>
+<code id="code" hidden></code>
+<p class="muted" id="hint" hidden>Copy the code above and paste it into the terminal where the Storytimes sign-in is waiting. It works for a few minutes.</p>
+</main>
+<script>
+const q = new URLSearchParams(location.search), code = q.get('code'), err = q.get('error_description') || q.get('error');
+if (code) { document.getElementById('h').textContent = 'TikTok approved'; document.getElementById('msg').textContent = 'Your one-time code:';
+  const c = document.getElementById('code'); c.textContent = code; c.hidden = false; document.getElementById('hint').hidden = false; }
+else document.getElementById('msg').textContent = err ? 'TikTok said: ' + err : 'No code from TikTok on this link.';
+</script></html>
