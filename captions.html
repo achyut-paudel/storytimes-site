@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Storytimes captions</title><link rel="stylesheet" href="style.css">
+<style>
+.cap{border-top:1px solid rgba(127,127,127,.3);padding:18px 0;display:flex;flex-direction:column;gap:10px}
+.cap h2{margin:0;font-size:1.05rem}.cap pre{white-space:pre-wrap;font:15px/1.5 Georgia,serif;margin:0}
+button{align-self:flex-start;font:600 16px system-ui;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:12px 18px}
+</style>
+<main>
+<h1>Captions</h1>
+<p class="muted">The newest video's caption is first. Tap Copy, then paste it into TikTok.</p>
+<div id="list">Loading...</div>
+</main>
+<script>
+fetch('captions.json?' + Date.now()).then(r => r.json()).then(items => {
+  const list = document.getElementById('list'); list.textContent = '';
+  items.forEach(it => {
+    const d = document.createElement('div'); d.className = 'cap';
+    const h = document.createElement('h2'); h.textContent = it.title + ' · ' + it.when; d.append(h);
+    const b = document.createElement('button'); b.textContent = 'Copy'; d.append(b);
+    const p = document.createElement('pre'); p.textContent = it.caption; d.append(p);
+    b.onclick = async () => { try { await navigator.clipboard.writeText(it.caption); b.textContent = 'Copied'; }
+      catch { const r = document.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); b.textContent = 'Selected'; }
+      setTimeout(() => b.textContent = 'Copy', 1500); };
+    list.append(d);
+  });
+}).catch(() => document.getElementById('list').textContent = 'No captions yet.');
+</script></html>
